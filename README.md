@@ -16,7 +16,7 @@ Methodos is an AI-augmented peer review and mentorship platform tailored for pos
 
 1. Clone or extract this directory into your Moodle site's activities folder as `mod/methodos`:
    ```bash
-   git clone https://github.com/your-org/mod_methodos.git mod/methodos
+   git clone https://github.com/admin-edufusionai/moodle-mod_methodos.git mod/methodos
    ```
    Or place the zip file contents inside `mod/methodos`.
 
