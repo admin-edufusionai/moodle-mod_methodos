@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/methodos/db" VERSION="2026062500" xmlns="http://xml.moodle.org/xmldb"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xml.moodle.org/xmldb ../../../lib/xmldb/xmldb.xsd"
+    COMMENT="XMLDB file for Moodle Methodos activity module"
+>
+  <TABLES>
+    <TABLE NAME="methodos" COMMENT="Defines Methodos peer review activity instances">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Unique identifier for this activity instance"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key referencing the course this activity belongs to"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the activity instance"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description text"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro description"/>
+        <FIELD NAME="ltiinstanceid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Reference to the shadow mod_lti instance ID"/>
+        <FIELD NAME="projectid" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Linked Methodos project/workspace token or ID"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was created"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for the methodos table"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course" COMMENT="Index on course field to speed up course lookups"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
