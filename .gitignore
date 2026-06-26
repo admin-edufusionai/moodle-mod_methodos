@@ -1,0 +1,24 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~
+
+# Backups
+*.bak
+*.orig
+
+# Cache and temporary files
+/cache/
+/temp/
+
+# Log files
+*.log
