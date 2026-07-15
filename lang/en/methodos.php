@@ -42,4 +42,9 @@ $string['moodle_issuer'] = 'LMS Issuer URL (iss)';
 // Warnings and Errors
 $string['not_configured_title'] = 'Integration Settings Pending';
 $string['not_configured_warning'] = 'The Methodos Integration has not been fully configured yet. Please ask your Moodle Administrator to set the Methodos Server URL under Site Administration -> Plugins -> Activity modules -> Methodos Peer Review.';
+$string['configwarning'] = 'Configuration warning: {$a}';
 $string['privacy:metadata'] = 'The Methodos Peer Review plugin acts as an LTI consumer and transmits user identity data (such as username, full name, and email address) securely to the external Methodos platform to authenticate the student or teacher and associate them with their academic submission files and peer review reports.';
+
+// Capability strings (required by db/access.php).
+$string['methodos:addinstance'] = 'Add a new Methodos Peer Review activity';
+$string['methodos:view'] = 'View Methodos Peer Review activity';
