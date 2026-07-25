@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build plugin zip
+        run: |
+          # Create a clean directory named after the Frankenstyle component
+          mkdir -p /tmp/methodos_build/methodos
+          rsync -av --exclude='.git' --exclude='.github' --exclude='screenshots' --exclude='.gitignore' \
+            ./ /tmp/methodos_build/methodos/
+          cd /tmp/methodos_build
+          zip -r methodos.zip methodos/
+          echo "Built: $(du -sh methodos.zip)"
+          cp methodos.zip $GITHUB_WORKSPACE/
+
+      - name: Extract release notes from CHANGES.md
+        id: changelog
+        run: |
+          if [ -f CHANGES.md ]; then
+            # Extract content between the first and second version headings
+            awk '/^## /{count++; if(count==2) exit} count==1 && NR>1' CHANGES.md > release_notes.txt
+          else
+            echo "See version.php for version details." > release_notes.txt
+          fi
+          echo "release_body<<EOF" >> $GITHUB_OUTPUT
+          cat release_notes.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Methodos Peer Review ${{ github.ref_name }}"
+          body: ${{ steps.changelog.outputs.release_body }}
+          files: methodos.zip
+          draft: false
+          prerelease: false
