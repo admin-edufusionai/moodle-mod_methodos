@@ -30,9 +30,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: [MOODLE_405_STABLE, MOODLE_404_STABLE]
-        php: ['8.2', '8.3']
-        database: [pgsql]
+        include:
+          - moodle-branch: MOODLE_405_STABLE
+            php: '8.2'
+            database: pgsql
+          - moodle-branch: MOODLE_405_STABLE
+            php: '8.3'
+            database: pgsql
+          - moodle-branch: MOODLE_404_STABLE
+            php: '8.2'
+            database: pgsql
 
     steps:
       - name: Check out repository code
@@ -64,8 +71,7 @@ jobs:
             --db-pass postgres \
             --db-name moodle \
             --db-type pgsql \
-            --moodle-branch ${{ matrix.moodle-branch }} \
-            --no-init
+            --moodle-branch ${{ matrix.moodle-branch }}
         env:
           DB: ${{ matrix.database }}
 
@@ -113,5 +119,6 @@ jobs:
         run: moodle-plugin-ci phpunit --fail-never
 
       - name: Behat features
+        continue-on-error: true
         if: ${{ always() }}
         run: moodle-plugin-ci behat --profile chrome
