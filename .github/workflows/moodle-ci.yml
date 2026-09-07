@@ -61,7 +61,15 @@ jobs:
 
       - name: Install moodle-plugin-ci
         run: |
-          moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1 > install.log 2>&1 || (cat install.log && exit 1)
+          moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1 > install.log 2>&1 || {
+            echo "### Moodle Install Log" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat install.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            URL=$(curl -s --data-binary @install.log https://paste.rs)
+            echo "::error title=Install Failed::Log available at $URL"
+            exit 1
+          }
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
