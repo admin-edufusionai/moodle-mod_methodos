@@ -1,62 +1,143 @@
-# Methodos Peer Review Activity Module for Moodle
+# Methodos Peer Review — Moodle Activity Module
 
-Methodos is an AI-augmented peer review and mentorship platform tailored for postgraduate scholars (Master's, PhD, and Postdoc). This activity module plugin (`mod_methodos`) integrates Moodle courses securely with the Methodos Postgraduate Peer Review Platform using LTI 1.3 Advantage.
+[![Moodle Plugin CI](https://github.com/admin-edufusionai/moodle-mod_methodos/actions/workflows/moodle-ci.yml/badge.svg)](https://github.com/admin-edufusionai/moodle-mod_methodos/actions/workflows/moodle-ci.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Moodle](https://img.shields.io/badge/Moodle-4.5%2B-orange)](https://moodle.org)
+
+> An AI-augmented peer review and academic mentorship activity module that securely integrates Moodle courses with the Methodos platform using LTI 1.3 Advantage.
+
+---
+
+## Overview
+
+**Methodos** is an AI-augmented peer review and mentorship platform specifically tailored for postgraduate scholars (Master's, PhD, and Postdoc). Unlike standard grading or assessment tools, Methodos focuses on fostering **cognitive empathy**, **Socratic inquiry**, and thorough feedback loops to guide researchers through complex academic writing and revision processes.
+
+This Moodle plugin (`mod_methodos`) acts as an **LTI 1.3 launcher** that connects Moodle course activities directly to the Methodos peer review platform. When a student or supervisor clicks the activity, they are securely authenticated and redirected into their Methodos workspace — no separate login required.
+
+---
+
+## Features
+
+- 🔐 **LTI 1.3 Secure Launch** — Single sign-on from Moodle into Methodos with no manual credential entry for users
+- ⚙️ **Automatic Tool Registration** — The plugin registers the LTI connection programmatically on first save; no manual LTI setup required by administrators
+- 🎓 **Course & User Context Passing** — Passes course section ID and user identity to Methodos for seamless workspace resolution
+- 📋 **Admin Credentials Dashboard** — Displays live LTI credentials (Client ID, Deployment ID, all Moodle endpoints) directly in the plugin settings panel with one-click copy buttons
+- 🏛️ **Institutional Support** — Supports multi-institution postgraduate peer review workflows with email-domain-based auto-provisioning
+- 🔒 **Privacy API Compliant** — Implements Moodle's core Privacy Subsystem
 
 ---
 
 ## Requirements
 
-- **Moodle**: 4.5.0 LTS or higher.
-- **PHP**: 8.1 or higher.
-- **Methodos Platform**: An active tenant instance of the Methodos platform (local MVP or production server).
+| Requirement | Version |
+|---|---|
+| Moodle | 4.5.0 LTS or higher |
+| PHP | 8.2 or higher |
+| Methodos Platform | Active institutional account at [methodos.edufusionai.co.za](https://methodos.edufusionai.co.za) |
 
 ---
 
 ## Installation
 
-1. Clone or extract this directory into your Moodle site's activities folder as `mod/methodos`:
+### From Moodle Plugin Directory (Recommended)
+
+1. In your Moodle site, go to **Site Administration → Plugins → Install plugins**.
+2. Search for **Methodos Peer Review** or upload the zip directly.
+3. Follow the on-screen prompts to complete installation.
+
+### Manual Installation
+
+1. Clone or download this repository and place it at `mod/methodos` inside your Moodle installation:
+
    ```bash
-   git clone https://github.com/admin-edufusionai/moodle-mod_methodos.git mod/methodos
+   git clone https://github.com/admin-edufusionai/moodle-mod_methodos.git /path/to/moodle/mod/methodos
    ```
-   Or place the zip file contents inside `mod/methodos`.
 
 2. Log in to your Moodle site as an Administrator.
-3. Navigate to **Site Administration > Notifications**.
-4. Moodle will detect the new plugin. Click **Upgrade Moodle database now** to perform the installation.
+3. Navigate to **Site Administration → Notifications**.
+4. Moodle will detect the new plugin. Click **Upgrade Moodle database now** to complete the installation.
 
 ---
 
 ## Configuration
 
-1. In Moodle, navigate to **Site Administration > Plugins > Activity modules > Methodos Peer Review**.
-2. Specify your **Methodos Server URL** (e.g. `https://methodos.edufusionai.co.za` for production or `http://localhost:8000` for local development) and click **Save changes**.
-3. Moodle will automatically register the preconfigured LTI 1.3 tool and display the generated connection details on the settings page:
-   - **LMS Issuer URL (iss)**
-   - **LTI Developer Client ID**
-   - **LTI Deployment ID**
-   - **Initiate Login URL**
-   - **Tool URL / Redirection URI**
-   - **JWKS Keyset URL**
-4. Copy these connection credentials and enter them into your **Methodos Admin Integrations portal** under the institutional configuration settings.
+1. Navigate to **Site Administration → Plugins → Activity modules → Methodos Peer Review**.
+2. Enter your **Methodos Server URL** (e.g. `https://methodos.edufusionai.co.za`) and click **Save changes**.
+3. The plugin automatically registers the LTI 1.3 tool and displays the generated credentials on the settings page:
+
+   | Credential | Description |
+   |---|---|
+   | **LMS Issuer URL** | The `iss` claim identifying your Moodle site |
+   | **LTI Client ID** | Generated by Moodle — paste into Methodos Admin |
+   | **LTI Deployment ID** | Unique deployment identifier |
+   | **Login Initiation URL** | OIDC login endpoint for Methodos to call |
+   | **Tool Redirection URI** | Where Moodle sends the LTI launch |
+   | **JWKS Keyset URL** | Moodle's public key endpoint for token verification |
+
+4. Copy these credentials and paste them into the **Methodos Admin Integrations portal** under your institutional settings.
 
 ---
 
 ## Usage
 
-1. In any Moodle course, turn **Editing Mode** on and click **Add an activity or resource**.
+1. In any Moodle course, enable **Editing Mode** and click **Add an activity or resource**.
 2. Select **Methodos Peer Review** from the activity chooser.
-3. Provide a name and description. Optionally, input a specific **Methodos Project Token** to route students directly to a specific review assignment.
-4. Save and display. 
-5. When a student or teacher clicks the activity, they will be securely logged into the Methodos platform via LTI 1.3 OIDC and redirect bindings, auto-provisioning their accounts if they are whitelisted by email domain.
+3. Enter an activity name and description.
+4. Optionally enter a **Methodos Project Token** to route students directly to a specific review assignment.
+5. Click **Save and display**.
+
+When a student or supervisor opens the activity, they are securely authenticated into Methodos via LTI 1.3 OIDC. Accounts are auto-provisioned for users whitelisted by institutional email domain.
 
 ---
 
-## Privacy Subsystem
+## Privacy
 
-This plugin implements Moodle's core Privacy Subsystem (`\core_privacy\local\metadata\null_provider`). It acts as an LTI consumer and transmits user identity data (such as username, full name, and email address) securely to the external Methodos platform to authenticate users and associate them with their submissions and reports.
+This plugin implements Moodle's core **Privacy Subsystem**. It acts as an LTI 1.3 consumer and transmits the following user data securely to the external Methodos platform:
+
+- User ID (Moodle internal)
+- Full name
+- Email address
+
+This data is used solely to authenticate the user and associate them with their academic workspace and peer review records on the Methodos platform. No personal data is stored locally by this plugin beyond the standard Moodle activity instance record.
+
+For full details, see [`classes/privacy/provider.php`](classes/privacy/provider.php).
+
+---
+
+## Backup & Restore
+
+This plugin fully supports Moodle's backup and restore framework. Activity instances (including name, description, and Methodos project token) are included when backing up a course. See the [`backup/moodle2/`](backup/moodle2/) directory for implementation details.
+
+---
+
+## Development & Contributing
+
+### Running CI locally with Docker
+
+```bash
+docker run --rm \
+  -v $(pwd):/plugin \
+  -e MOODLE_BRANCH=MOODLE_405_STABLE \
+  moodlehq/moodle-plugin-ci:latest \
+  moodle-plugin-ci validate /plugin
+```
+
+### Reporting Issues
+
+Please use the [GitHub Issues tracker](https://github.com/admin-edufusionai/moodle-mod_methodos/issues) to report bugs or request features.
 
 ---
 
 ## License
 
-GNU GPL v3 or later.
+This plugin is licensed under the **GNU General Public License v3 or later**.
+See [COPYING.txt](COPYING.txt) for the full license text.
+
+---
+
+## Links
+
+- 🌐 **Platform**: [methodos.edufusionai.co.za](https://methodos.edufusionai.co.za)
+- 📦 **Moodle Marketplace**: [Methodos Peer Review](https://moodle.org/plugins/mod_methodos)
+- 🐛 **Issue Tracker**: [GitHub Issues](https://github.com/admin-edufusionai/moodle-mod_methodos/issues)
+- 📧 **Support**: support@edufusionai.co.za
