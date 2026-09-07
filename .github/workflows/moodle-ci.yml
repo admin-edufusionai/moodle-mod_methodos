@@ -34,9 +34,6 @@ jobs:
           - moodle-branch: MOODLE_405_STABLE
             php: '8.3'
             database: pgsql
-          - moodle-branch: MOODLE_405_STABLE
-            php: '8.2'
-            database: pgsql
 
     steps:
       - name: Check out repository code
@@ -54,10 +51,14 @@ jobs:
 
       - name: Initialise moodle-plugin-ci
         run: |
-          composer create-project -n --no-dev --prefer-dist \
-            moodlehq/moodle-plugin-ci ci ^4
-          echo $(cd ci && pwd)/vendor/bin >> $GITHUB_PATH
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo "$GITHUB_WORKSPACE/ci/vendor/bin" >> $GITHUB_PATH
           echo CI_UPDATE=true >> $GITHUB_ENV
+
+      - name: Verify moodle-plugin-ci is available
+        run: |
+          which moodle-plugin-ci
+          moodle-plugin-ci --version
 
       - name: Install Moodle
         run: |
@@ -67,10 +68,9 @@ jobs:
             --db-user postgres \
             --db-pass postgres \
             --db-name moodle \
-            --db-type pgsql \
+            --db-type ${{ matrix.database }} \
             --moodle-branch ${{ matrix.moodle-branch }}
         env:
-          DB: ${{ matrix.database }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: PHP Lint
