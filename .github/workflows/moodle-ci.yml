@@ -52,13 +52,9 @@ jobs:
       - name: Initialise moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo "$GITHUB_WORKSPACE/ci/bin" >> $GITHUB_PATH
           echo "$GITHUB_WORKSPACE/ci/vendor/bin" >> $GITHUB_PATH
           echo CI_UPDATE=true >> $GITHUB_ENV
-
-      - name: Verify moodle-plugin-ci is available
-        run: |
-          which moodle-plugin-ci
-          moodle-plugin-ci --version
 
       - name: Install Moodle
         run: |
