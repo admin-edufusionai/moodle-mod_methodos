@@ -15,6 +15,10 @@ $string['modulenameplural'] = 'Methodos Peer Reviews';
 $string['modulename_help'] = 'Methodos is an AI-augmented peer review and mentorship platform. It structures postgraduate academic feedback using cognitive empathy, Socratic questioning, and automated LLM alignment analysis.';
 $string['pluginadministration'] = 'Methodos Peer Review Administration';
 
+// Capabilities
+$string['methodos:addinstance'] = 'Add a new Methodos Peer Review activity';
+$string['methodos:view'] = 'View Methodos Peer Review activity';
+
 // Settings
 $string['methodosurl'] = 'Methodos Server URL';
 $string['methodosurl_desc'] = 'The API URL where the Methodos platform is running (e.g., https://methodos.co.za or http://localhost:8000). Do not include a trailing slash.';
@@ -42,4 +46,5 @@ $string['moodle_issuer'] = 'LMS Issuer URL (iss)';
 // Warnings and Errors
 $string['not_configured_title'] = 'Integration Settings Pending';
 $string['not_configured_warning'] = 'The Methodos Integration has not been fully configured yet. Please ask your Moodle Administrator to set the Methodos Server URL under Site Administration -> Plugins -> Activity modules -> Methodos Peer Review.';
+$string['configwarning'] = 'Configuration warning: Methodos Server URL is not configured.';
 $string['privacy:metadata'] = 'The Methodos Peer Review plugin acts as an LTI consumer and transmits user identity data (such as username, full name, and email address) securely to the external Methodos platform to authenticate the student or teacher and associate them with their academic submission files and peer review reports.';
