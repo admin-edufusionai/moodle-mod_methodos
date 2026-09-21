@@ -17,7 +17,7 @@ $string['pluginadministration'] = 'Methodos Peer Review Administration';
 
 // Settings
 $string['methodosurl'] = 'Methodos Server URL';
-$string['methodosurl_desc'] = 'The API URL where the Methodos application is running (e.g., http://localhost:8000 or https://methodos.ac.za). Do not include a trailing slash.';
+$string['methodosurl_desc'] = 'The API URL where the Methodos platform is running (e.g., https://methodos.co.za or http://localhost:8000). Do not include a trailing slash.';
 $string['projectid'] = 'Methodos Project Token / ID';
 $string['projectid_help'] = 'Enter the specific Project Token or Course Workspace ID from the Methodos platform. If left blank, this activity will resolve to the default course workspace or let users choose.';
 
@@ -42,9 +42,4 @@ $string['moodle_issuer'] = 'LMS Issuer URL (iss)';
 // Warnings and Errors
 $string['not_configured_title'] = 'Integration Settings Pending';
 $string['not_configured_warning'] = 'The Methodos Integration has not been fully configured yet. Please ask your Moodle Administrator to set the Methodos Server URL under Site Administration -> Plugins -> Activity modules -> Methodos Peer Review.';
-$string['configwarning'] = 'Configuration warning: {$a}';
 $string['privacy:metadata'] = 'The Methodos Peer Review plugin acts as an LTI consumer and transmits user identity data (such as username, full name, and email address) securely to the external Methodos platform to authenticate the student or teacher and associate them with their academic submission files and peer review reports.';
-
-// Capability strings (required by db/access.php).
-$string['methodos:addinstance'] = 'Add a new Methodos Peer Review activity';
-$string['methodos:view'] = 'View Methodos Peer Review activity';

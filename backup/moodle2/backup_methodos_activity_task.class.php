@@ -1,69 +1,56 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Backup activity task for the Methodos module.
+ * Defines backup_methodos_activity_task class
  *
- * @package    mod_methodos
- * @category   backup
- * @copyright  2026 Methodos Peer Review <support@methodos.edufusionai.co.za>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_methodos
+ * @category    backup
+ * @copyright   2026 Methodos Peer Review
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/backup/moodle2/backup_mod_lesson_activity_task.class.php');
+require_once($CFG->dirroot . '/mod/methodos/backup/moodle2/backup_methodos_stepslib.php');
 
 /**
- * Provides all the settings and steps to perform one complete backup of the activity.
+ * Provides all the settings and steps to perform one complete backup of the activity
  */
 class backup_methodos_activity_task extends backup_activity_task {
 
     /**
-     * No specific settings for this activity.
+     * Define (add) particular settings this activity can have
      */
     protected function define_my_settings() {
-        // No specific settings.
+        // No particular settings for this activity.
     }
 
     /**
-     * Defines a backup step to store the instance data in the methodos.xml file.
+     * Define (add) particular steps this activity can have
      */
     protected function define_my_steps() {
+        // Methodos only has one structure step.
         $this->add_step(new backup_methodos_activity_structure_step('methodos_structure', 'methodos.xml'));
     }
 
     /**
-     * Encodes URLs to the Methodos module view.php script.
+     * Code the transformations to perform in the activity in
+     * order to get transportable (encoded) links
      *
-     * @param string $content Content to encode.
-     * @return string Encoded content.
+     * @param string $content
+     * @return string
      */
     static public function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot, '/');
+        $base = preg_quote($CFG->wwwroot, "/");
 
-        // Link to the list of methodos activities.
-        $search = '/(' . $base . '\/mod\/methodos\/index\.php\?id\=)([0-9]+)/';
-        $content = preg_replace($search, '$@METODOSINDEX*$2@$', $content);
+        // Link to the list of methodos instances.
+        $search = "/(" . $base . "\/mod\/methodos\/index\.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@METHODOSINDEX*$2@$', $content);
 
-        // Link to methodos view by module id.
-        $search = '/(' . $base . '\/mod\/methodos\/view\.php\?id\=)([0-9]+)/';
-        $content = preg_replace($search, '$@METODOSVIEWBYID*$2@$', $content);
+        // Link to methodos view by moduleid.
+        $search = "/(" . $base . "\/mod\/methodos\/view\.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@METHODOSVIEWBYID*$2@$', $content);
 
         return $content;
     }

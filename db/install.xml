@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/methodos/db" VERSION="2026072501" COMMENT="XMLDB file for Moodle Methodos activity module"
+<XMLDB PATH="mod/methodos/db" VERSION="2026062500" xmlns="http://xml.moodle.org/xmldb"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+    xsi:schemaLocation="http://xml.moodle.org/xmldb ../../../lib/xmldb/xmldb.xsd"
+    COMMENT="XMLDB file for Moodle Methodos activity module"
 >
   <TABLES>
     <TABLE NAME="methodos" COMMENT="Defines Methodos peer review activity instances">

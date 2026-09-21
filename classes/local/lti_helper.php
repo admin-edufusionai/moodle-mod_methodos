@@ -1,24 +1,9 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Helper class for managing programmatic LTI tool registration in Moodle.
  *
  * @package    mod_methodos
- * @copyright  2026 Methodos Peer Review <support@methodos.edufusionai.co.za>
+ * @copyright  2026 Methodos Peer Review
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -40,12 +25,12 @@ class lti_helper {
 
         $serverurl = get_config('mod_methodos', 'methodosurl');
         if (empty($serverurl)) {
-            $serverurl = 'http://localhost:8000'; // Default fallback for local sandbox
+            $serverurl = 'https://methodos.co.za'; // Default production Methodos URL
         }
 
         // Host domain for lookup
         $parsedurl = parse_url($serverurl);
-        $domain = isset($parsedurl['host']) ? $parsedurl['host'] : 'localhost';
+        $domain = isset($parsedurl['host']) ? $parsedurl['host'] : 'methodos.co.za';
         if (isset($parsedurl['port'])) {
             $domain .= ':' . $parsedurl['port'];
         }
@@ -61,14 +46,16 @@ class lti_helper {
         $config->authenticationurl = $loginurl;
         $config->publickeyseturl = $jwksurl;
         $config->redirectionuris = $launchurl;
-        $config->keytype = 'jwk';
+        $config->keytype = 'KEYSET';
         $config->sendname = 1; // LTI_SETTING_ALWAYS (Always send name)
         $config->sendemailaddr = 1; // LTI_SETTING_ALWAYS (Always send email)
         $config->acceptgrades = 1; // LTI_SETTING_ALWAYS (Always accept grades)
+        $config->services = 2; // LTI Assignment and Grade Services (AGS)
+        $config->gradesync = 2;
         $config->customparameters = "methodos_project_id=\$CourseSection.id\n";
 
         if ($type) {
-            // Check if the URL has changed and update if necessary.
+            // Check if the URL has changed and update if necessary
             if ($type->baseurl !== $launchurl) {
                 $type->baseurl = $launchurl;
                 $type->tooldomain = $domain;
@@ -76,15 +63,10 @@ class lti_helper {
                 $DB->update_record('lti_types', $type);
             }
 
-            // Pre-fetch all existing config records for this tool type in a single bulk query
-            // to avoid N+1 query issues inside the synchronisation loop below.
-            $existing_configs = $DB->get_records('lti_types_config',
-                array('typeid' => $type->id), '', 'name, id, value');
-
-            // Iterate over the desired config values and upsert only what has changed.
+            // Always verify and synchronize type config records to keep them up to date
             foreach ($config as $name => $value) {
-                if (isset($existing_configs[$name])) {
-                    $configrecord = $existing_configs[$name];
+                $configrecord = $DB->get_record('lti_types_config', array('typeid' => $type->id, 'name' => $name));
+                if ($configrecord) {
                     if ($configrecord->value !== $value) {
                         $configrecord->value = $value;
                         $DB->update_record('lti_types_config', $configrecord);

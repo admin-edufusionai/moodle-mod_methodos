@@ -1,53 +1,39 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Restore structure steps for the Methodos module.
+ * Define all the restore steps that will be used by the restore_methodos_activity_task
  *
- * @package    mod_methodos
- * @category   backup
- * @copyright  2026 Methodos Peer Review <support@methodos.edufusionai.co.za>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_methodos
+ * @category    backup
+ * @copyright   2026 Methodos Peer Review
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Defines the structure step that will restore the data for a Methodos activity from the backup XML.
+ * Structure step to restore one methodos activity
  */
 class restore_methodos_activity_structure_step extends restore_activity_structure_step {
 
     /**
-     * Defines the structure of the restore XML.
+     * Structure step definitions
      *
-     * @return array List of restore path elements.
+     * @return array
      */
     protected function define_structure() {
+
         $paths = array();
-        $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('methodos', '/activity/methodos');
 
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
     /**
-     * Processes the methodos element from the backup XML.
+     * Process a methodos restore
      *
-     * @param array $data The data read from the backup XML.
+     * @param object $data The data in object form
      */
     protected function process_methodos($data) {
         global $DB;
@@ -56,18 +42,58 @@ class restore_methodos_activity_structure_step extends restore_activity_structur
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
+        $data->timecreated = $this->apply_date_offset($data->timecreated);
+        $data->timemodified = $this->apply_date_offset($data->timemodified);
+
+        // Ensure the preconfigured LTI tool is ready
+        try {
+            $ltitype = \mod_methodos\local\lti_helper::get_or_create_lti_type();
+            $ltitypeid = $ltitype->id;
+        } catch (Exception $e) {
+            $ltitypeid = 0;
+        }
+
+        // Recreate shadow LTI record for restored course
+        $lti = new stdClass();
+        $lti->course = $data->course;
+        $lti->name = $data->name;
+        $lti->intro = isset($data->intro) ? $data->intro : '';
+        $lti->introformat = isset($data->introformat) ? $data->introformat : FORMAT_HTML;
+        $lti->timecreated = time();
+        $lti->timemodified = time();
+        $lti->typeid = $ltitypeid;
+        $lti->toolurl = '';
+        $lti->securetoolurl = '';
+        $lti->instructorchoicesendname = 1;
+        $lti->instructorchoicesendemailaddr = 1;
+        $lti->instructorchoiceacceptgrades = 1;
+        $lti->grade = 100;
+        $lti->launchcontainer = 3;
+        $lti->resourcekey = '';
+        $lti->password = '';
+        $lti->debuglaunch = 0;
+        $lti->showtitlelaunch = 0;
+        $lti->showdescriptionlaunch = 0;
+        $lti->servicesintro = '';
+        $lti->servicesintroformat = 0;
+
+        $projectid = isset($data->projectid) ? trim($data->projectid) : '';
+        $lti->customparameters = "methodos_project_id=" . $projectid . "\n";
+
+        $ltiinstanceid = $DB->insert_record('lti', $lti);
+        $data->ltiinstanceid = $ltiinstanceid;
+
         // Insert the methodos record.
         $newitemid = $DB->insert_record('methodos', $data);
-
         // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
 
     /**
-     * Adds post-restore actions.
+     * Post-execution actions
      */
     protected function after_execute() {
-        // Add methodos related files, no user info needed.
+        // Add methodos related files, no need to match by itemname (just intro).
         $this->add_related_files('mod_methodos', 'intro', null);
     }
 }

@@ -2,7 +2,14 @@
 
 All notable changes to `mod_methodos` will be documented in this file.
 
-## v1.0.1 - 2026-07-15
+## v1.1.4 - 2026-09-21
+
+### Fixed
+- Implemented full Moodle 2 Course Backup & Restore handlers in `backup/moodle2/` (`backup_methodos_activity_task.class.php`, `backup_methodos_stepslib.php`, `restore_methodos_activity_task.class.php`, `restore_methodos_stepslib.php`) resolving course backup crashes.
+- Fixed LTI tool preconfiguration and shadow LTI mapping for project token parameters.
+- Broadened Moodle compatibility support to Moodle 4.1.0 LTS through 4.5+.
+- Added vector and high-resolution activity icons in `pix/icon.svg` and `pix/icon.png`.
+- Updated Moodle privacy subsystem metadata strings.
 
 ### Fixed
 - Added missing GNU GPL v3 `COPYING.txt` package-level license file.

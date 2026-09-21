@@ -1,24 +1,9 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Settings for the Methodos activity module.
  *
  * @package    mod_methodos
- * @copyright  2026 Methodos Peer Review <support@methodos.edufusionai.co.za>
+ * @copyright  2026 Methodos Peer Review
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,14 +15,14 @@ if ($ADMIN->fulltree) {
         'mod_methodos/methodosurl',
         get_string('methodosurl', 'mod_methodos'),
         get_string('methodosurl_desc', 'mod_methodos'),
-        'http://localhost:8000',
+        'https://methodos.co.za',
         PARAM_URL
     ));
 
-    // Initialize integration details.
+    // Initialize integration details
     $clientid = '-';
     $deploymentid = '-';
-    $errormsg = '';
+    $errorMsg = '';
 
     // Check if the lti_types table exists before querying to prevent breaking the install process.
     try {
@@ -51,7 +36,7 @@ if ($ADMIN->fulltree) {
             }
         }
     } catch (Exception $e) {
-        $errormsg = $e->getMessage();
+        $errorMsg = $e->getMessage();
     }
 
     $issuer = $CFG->wwwroot;
@@ -73,8 +58,8 @@ if ($ADMIN->fulltree) {
         'style' => 'color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 20px;'
     ));
 
-    if (!empty($errormsg)) {
-        $desc .= html_writer::tag('div', get_string('configwarning', 'mod_methodos', s($errormsg)), array(
+    if (!empty($errorMsg)) {
+        $desc .= html_writer::tag('div', 'Configuration warning: ' . s($errorMsg), array(
             'class' => 'alert alert-warning',
             'style' => 'background-color: #78350f; color: #fef3c7; border: 1px solid #92400e; border-radius: 6px; padding: 12px; margin-bottom: 15px;'
         ));
@@ -187,6 +172,7 @@ if ($ADMIN->fulltree) {
     $desc .= html_writer::end_tag('tbody');
     $desc .= html_writer::end_tag('table');
     $desc .= html_writer::end_tag('div');
+
 
     $settings->add(new admin_setting_heading(
         'mod_methodos/integration_details',

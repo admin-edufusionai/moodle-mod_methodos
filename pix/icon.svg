@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="methodosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded Base Badge -->
+  <rect width="24" height="24" rx="5" fill="url(#methodosGrad)"/>
+  <!-- Academic Open Book / Socratic Dialogue Icon -->
+  <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H11v13H6.5A2.5 2.5 0 0 0 4 19.5v-13z" fill="#ffffff" fill-opacity="0.95"/>
+  <path d="M20 6.5A2.5 2.5 0 0 0 17.5 4H13v13h4.5a2.5 2.5 0 0 1 2.5 2.5v-13z" fill="#ffffff" fill-opacity="0.85"/>
+  <!-- Central spine line -->
+  <line x1="12" y1="4" x2="12" y2="17" stroke="#0284c7" stroke-width="0.8"/>
+  <!-- Socratic Dialogue / Sparkle Indicator -->
+  <circle cx="17" cy="8.5" r="1.2" fill="#38bdf8"/>
+  <circle cx="7" cy="8.5" r="1.2" fill="#38bdf8"/>
+</svg>
