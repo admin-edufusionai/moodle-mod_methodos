@@ -2,6 +2,14 @@
 
 All notable changes to `mod_methodos` will be documented in this file.
 
+## v1.1.5 - 2026-09-21
+
+### Fixed
+- Fixed XMLDB schema namespace definition in `db/install.xml` for strict Moodle Plugin CI (`moodle-plugin-ci validate`) table parser compliance.
+- Added explicit capability language strings `methodos:addinstance` and `methodos:view` in `lang/en/methodos.php`.
+- Added localized configuration warning string `configwarning`.
+- Bumped plugin release to `v1.1.5` (version `2026092105`).
+
 ## v1.1.4 - 2026-09-21
 
 ### Fixed
