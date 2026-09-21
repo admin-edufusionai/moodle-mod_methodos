@@ -2,6 +2,11 @@
 
 All notable changes to `mod_methodos` will be documented in this file.
 
+## v1.1.6 - 2026-09-21
+
+### Fixed
+- Release version bump to `v1.1.6` (version `2026092106`) for Moodle Marketplace validation synchronization.
+
 ## v1.1.5 - 2026-09-21
 
 ### Fixed

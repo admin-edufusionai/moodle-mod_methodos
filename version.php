@@ -9,8 +9,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026092105;       // The current module version (YYYYMMDDXX).
+$plugin->version   = 2026092106;       // The current module version (YYYYMMDDXX).
 $plugin->requires  = 2022112800;       // Requires Moodle 4.1.0 LTS (compatible up to 4.5+).
 $plugin->component = 'mod_methodos';   // Full name of the plugin (must match folder name).
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.1.5';
+$plugin->release   = 'v1.1.6';
