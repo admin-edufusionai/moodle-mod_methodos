@@ -66,11 +66,14 @@ if ($ADMIN->fulltree) {
     }
 
     // Helper function to render copyable credentials
-    $make_copyable = function($value) {
+    $makecopyable = function($value) {
         $jsvalue = addslashes($value);
-        $btn = html_writer::tag('button', 'Copy', array(
+        $btnstyle = 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; '
+            . 'background-color: #475569 !important; border-color: #475569 !important; '
+            . 'color: #ffffff !important; font-family: sans-serif;';
+        $btn = html_writer::tag('button', 'Copy', [
             'class' => 'btn btn-secondary btn-sm',
-            'style' => 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; background-color: #475569 !important; border-color: #475569 !important; color: #ffffff !important; font-family: sans-serif;',
+            'style' => $btnstyle,
             'onclick' => "navigator.clipboard.writeText('{$jsvalue}').then(() => {
                 const btn = this;
                 const oldText = btn.innerText;
@@ -81,31 +84,44 @@ if ($ADMIN->fulltree) {
                     btn.style.backgroundColor = '#475569';
                 }, 1500);
             }); return false;"
-        ));
-        return html_writer::tag('span', s($value), array('style' => 'vertical-align: middle;')) . $btn;
+        ]);
+        return html_writer::tag('span', s($value), ['style' => 'vertical-align: middle;']) . $btn;
     };
 
-    $desc .= html_writer::start_tag('table', array(
+    $desc .= html_writer::start_tag('table', [
         'class' => 'table table-bordered',
-        'style' => 'margin-top: 15px; background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; font-family: monospace; font-size: 13px;'
-    ));
+        'style' => 'margin-top: 15px; background-color: #1e293b !important; color: #f8fafc !important; '
+            . 'border-color: #334155 !important; font-family: monospace; font-size: 13px;'
+    ]);
     $desc .= html_writer::start_tag('tbody');
 
     // Issuer URL
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('moodle_issuer', 'mod_methodos') . '</strong>', array('style' => 'width: 35%; border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $make_copyable($issuer), array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('moodle_issuer', 'mod_methodos') . '</strong>', [
+        'style' => 'width: 35%; border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $makecopyable($issuer), [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     // Client ID
-    $clientid_html = empty($clientid) || $clientid === '-' ? '<em>Generating during first save...</em>' : html_writer::tag('span', s($clientid), array(
-        'style' => 'font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background-color: #0d9488 !important; color: #ffffff !important; display: inline-block; vertical-align: middle;'
-    ));
+    $clientidhtml = empty($clientid) || $clientid === '-' ? '<em>Generating during first save...</em>' :
+        html_writer::tag('span', s($clientid), [
+            'style' => 'font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 4px; '
+                . 'background-color: #0d9488 !important; color: #ffffff !important; '
+                . 'display: inline-block; vertical-align: middle;'
+        ]);
     if (!empty($clientid) && $clientid !== '-') {
         $jsvalue = addslashes($clientid);
-        $clientid_html .= html_writer::tag('button', 'Copy', array(
+        $btnstyle = 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; '
+            . 'background-color: #475569 !important; border-color: #475569 !important; '
+            . 'color: #ffffff !important; font-family: sans-serif;';
+        $clientidhtml .= html_writer::tag('button', 'Copy', [
             'class' => 'btn btn-secondary btn-sm',
-            'style' => 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; background-color: #475569 !important; border-color: #475569 !important; color: #ffffff !important; font-family: sans-serif;',
+            'style' => $btnstyle,
             'onclick' => "navigator.clipboard.writeText('{$jsvalue}').then(() => {
                 const btn = this;
                 const oldText = btn.innerText;
@@ -116,23 +132,35 @@ if ($ADMIN->fulltree) {
                     btn.style.backgroundColor = '#475569';
                 }, 1500);
             }); return false;"
-        ));
+        ]);
     }
 
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('clientid', 'mod_methodos') . '</strong>', array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $clientid_html, array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('clientid', 'mod_methodos') . '</strong>', [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $clientidhtml, [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     // Deployment ID
-    $deploymentid_html = empty($deploymentid) || $deploymentid === '-' ? '-' : html_writer::tag('span', s($deploymentid), array(
-        'style' => 'font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background-color: #4f46e5 !important; color: #ffffff !important; display: inline-block; vertical-align: middle;'
-    ));
+    $deploymentidhtml = empty($deploymentid) || $deploymentid === '-' ? '-' :
+        html_writer::tag('span', s($deploymentid), [
+            'style' => 'font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 4px; '
+                . 'background-color: #4f46e5 !important; color: #ffffff !important; '
+                . 'display: inline-block; vertical-align: middle;'
+        ]);
     if (!empty($deploymentid) && $deploymentid !== '-') {
         $jsvalue = addslashes($deploymentid);
-        $deploymentid_html .= html_writer::tag('button', 'Copy', array(
+        $btnstyle = 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; '
+            . 'background-color: #475569 !important; border-color: #475569 !important; '
+            . 'color: #ffffff !important; font-family: sans-serif;';
+        $deploymentidhtml .= html_writer::tag('button', 'Copy', [
             'class' => 'btn btn-secondary btn-sm',
-            'style' => 'padding: 1px 6px; font-size: 10px; cursor: pointer; float: right; background-color: #475569 !important; border-color: #475569 !important; color: #ffffff !important; font-family: sans-serif;',
+            'style' => $btnstyle,
             'onclick' => "navigator.clipboard.writeText('{$jsvalue}').then(() => {
                 const btn = this;
                 const oldText = btn.innerText;
@@ -143,30 +171,54 @@ if ($ADMIN->fulltree) {
                     btn.style.backgroundColor = '#475569';
                 }, 1500);
             }); return false;"
-        ));
+        ]);
     }
 
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('deploymentid', 'mod_methodos') . '</strong>', array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $deploymentid_html, array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('deploymentid', 'mod_methodos') . '</strong>', [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $deploymentidhtml, [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     // Login URL
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('login_initiation_uri', 'mod_methodos') . '</strong>', array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $make_copyable($loginurl), array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('login_initiation_uri', 'mod_methodos') . '</strong>', [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $makecopyable($loginurl), [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     // Redirection URI
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('target_link_uri', 'mod_methodos') . '</strong>', array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $make_copyable($redirectionurl), array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('target_link_uri', 'mod_methodos') . '</strong>', [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $makecopyable($redirectionurl), [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     // JWKS Keyset URL
-    $desc .= html_writer::start_tag('tr', array('style' => 'border-color: #334155 !important;'));
-    $desc .= html_writer::tag('td', '<strong>' . get_string('jwks_uri', 'mod_methodos') . '</strong>', array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #94a3b8 !important;'));
-    $desc .= html_writer::tag('td', $make_copyable($keyseturl), array('style' => 'border-color: #334155 !important; background-color: #1e293b !important; color: #f8fafc !important; word-break: break-all;'));
+    $desc .= html_writer::start_tag('tr', ['style' => 'border-color: #334155 !important;']);
+    $desc .= html_writer::tag('td', '<strong>' . get_string('jwks_uri', 'mod_methodos') . '</strong>', [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #94a3b8 !important;'
+    ]);
+    $desc .= html_writer::tag('td', $makecopyable($keyseturl), [
+        'style' => 'border-color: #334155 !important; background-color: #1e293b !important; '
+            . 'color: #f8fafc !important; word-break: break-all;'
+    ]);
     $desc .= html_writer::end_tag('tr');
 
     $desc .= html_writer::end_tag('tbody');

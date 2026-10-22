@@ -63,19 +63,24 @@ class lti_helper {
                 $DB->update_record('lti_types', $type);
             }
 
-            // Always verify and synchronize type config records to keep them up to date
+            // Pre-fetch all existing config records for this tool type in a single bulk query
+            // to avoid N+1 query issues inside the synchronisation loop below.
+            $existing_configs = $DB->get_records('lti_types_config',
+                ['typeid' => $type->id], '', 'name, id, value');
+
+            // Iterate over the desired config values and upsert only what has changed.
             foreach ($config as $name => $value) {
-                $configrecord = $DB->get_record('lti_types_config', array('typeid' => $type->id, 'name' => $name));
-                if ($configrecord) {
-                    if ($configrecord->value !== $value) {
-                        $configrecord->value = $value;
+                if (isset($existing_configs[$name])) {
+                    $configrecord = $existing_configs[$name];
+                    if ((string)$configrecord->value !== (string)$value) {
+                        $configrecord->value = (string)$value;
                         $DB->update_record('lti_types_config', $configrecord);
                     }
                 } else {
                     $configrecord = new \stdClass();
                     $configrecord->typeid = $type->id;
                     $configrecord->name = $name;
-                    $configrecord->value = $value;
+                    $configrecord->value = (string)$value;
                     $DB->insert_record('lti_types_config', $configrecord);
                 }
             }
