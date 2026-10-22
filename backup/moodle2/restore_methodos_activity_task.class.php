@@ -63,7 +63,7 @@ class restore_methodos_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
+     * by the {@see restore_logs_processor} when restoring
      * methodos logs.
      *
      * @return array
@@ -80,7 +80,7 @@ class restore_methodos_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
+     * by the {@see restore_logs_processor} when restoring
      * course logs.
      *
      * @return array

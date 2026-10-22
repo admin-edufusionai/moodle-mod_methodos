@@ -2,6 +2,15 @@
 
 All notable changes to `mod_methodos` will be documented in this file.
 
+## v1.1.7 - 2026-10-22
+
+### Fixed
+- Hardened PHP 8.2 and PHP 8.3 runtime compatibility across all module handlers.
+- Updated backup/restore method declarations to PSR-12 standard `public static function`.
+- Resolved strict type comparison in LTI helper configuration synchronization.
+- Fixed PHPDoc inline link tags for strict Moodle PHPDoc Checker compliance.
+- Upgraded CI workflows with automated PostgreSQL 14 multi-version matrix testing under PHP 8.2 and 8.3.
+
 ## v1.1.6 - 2026-09-21
 
 ### Fixed
